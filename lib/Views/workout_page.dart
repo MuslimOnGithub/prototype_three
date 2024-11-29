@@ -24,8 +24,6 @@ class WorkoutPage extends StatefulWidget {
 class _WorkoutPageState extends State<WorkoutPage> {
   final TextEditingController textController = TextEditingController();
 
-  
-
   @override
   Widget build(BuildContext context) {
     Future<TestWorkout?> getMostRecentWorkout() async {
@@ -89,21 +87,25 @@ class _WorkoutPageState extends State<WorkoutPage> {
                       .map((json) => TestExercise.fromJson(json))
                       .toList();
 
-                  return ListView.builder(
-                    itemCount: exercises.length,
-                    itemBuilder: (context, index) {
-                      final exercise = exercises[index];
+                  if(exercises.isNotEmpty){
+                    return ListView.builder(
+                      itemCount: exercises.length,
+                      itemBuilder: (context, index) {
+                        final exercise = exercises[index];
 
-                      return GestureDetector(
-                        onTap: () async {
-                          await exercise.fetchSets();
-                        },
-                        child: ExerciseCard(
-                            exercise: exercise,
-                            onTap: () => _showBottomSheet(context, exercise)),
-                      );
-                    },
-                  );
+                        return GestureDetector(
+                          onTap: () async {
+                            await exercise.fetchSets();
+                          },
+                          child: ExerciseCard(
+                              exercise: exercise,
+                              onTap: () => _showBottomSheet(context, exercise)),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text("press the add button"),);
+                  }
                 },
               );
             }
